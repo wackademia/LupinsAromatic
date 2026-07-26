@@ -58,3 +58,15 @@ cd server && npm run seed
 cd client && npm run build   # outputs client/dist
 ```
 Serve `client/dist` from any static host and point it at your deployed API.
+
+## 6. Deploying to Vercel
+The repo root has `vercel.json` and `api/index.js`, which wrap the Express
+routes as a single Vercel serverless function so the client and API deploy
+together from one project (same domain, no CORS needed).
+
+1. Import this repo in Vercel (root directory = repo root, framework preset
+   "Other" — `vercel.json` handles the build).
+2. Set the `MONGODB_URI` environment variable (e.g. a MongoDB Atlas
+   connection string) on the Vercel project.
+3. Deploy. `/api/*` requests are routed to `api/index.js`; everything else
+   serves the built client from `client/dist`.
