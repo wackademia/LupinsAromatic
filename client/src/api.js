@@ -1,5 +1,8 @@
 // All product data comes from the Express + MongoDB backend.
-const BASE = "/api";
+// In dev, Vite proxies /api to localhost:5000 (see vite.config.js).
+// In production, set VITE_API_URL to the deployed backend's origin.
+const API_URL = import.meta.env.VITE_API_URL || "";
+const BASE = `${API_URL}/api`;
 
 export async function getProducts(params = {}) {
   const qs = new URLSearchParams(params).toString();
