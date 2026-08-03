@@ -46,23 +46,30 @@ a { color: inherit; text-decoration: none; }
   color: var(--ink); opacity: .8; transition: opacity .2s;
 }
 .nav__links a:hover { opacity: 1; }
-.nav__toggle { display: none; background: none; border: 0; cursor: pointer; gap: 5px; flex-direction: column; }
-.nav__toggle span { width: 24px; height: 2px; background: var(--ink); display: block; }
+.nav__toggle { display: none; background: none; border: 0; cursor: pointer; align-items: center; justify-content: center; width: 24px; height: 24px; }
+.nav__toggle-bars { display: flex; flex-direction: column; gap: 5px; }
+.nav__toggle-bar { width: 24px; height: 2px; background: var(--ink); display: block; }
 
 /* ---------- Hero ---------- */
 .hero {
   min-height: 92vh;
   display: flex; align-items: center;
-  background: var(--bg-soft);
+  background: radial-gradient(circle at 80% 20%, #eef0e6 0%, var(--bg-soft) 55%);
   padding: 120px 28px 80px;
+  overflow: hidden;
 }
-.hero__content { max-width: var(--max); margin: 0 auto; width: 100%; }
+.hero__content {
+  max-width: var(--max); margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px; align-items: center;
+}
 .hero__eyebrow {
   text-transform: uppercase; letter-spacing: 3px; font-size: 12px;
   color: var(--accent); margin-bottom: 22px;
 }
-.hero__title { font-family: var(--serif); font-weight: 500; font-size: clamp(44px, 8vw, 88px); line-height: 1.02; }
+.hero__title { font-family: var(--serif); font-weight: 500; font-size: clamp(44px, 6vw, 80px); line-height: 1.02; }
 .hero__sub { max-width: 460px; margin: 26px 0 36px; color: var(--muted); font-size: 17px; }
+.hero__stage { position: relative; height: 480px; }
+.hero__stage canvas { touch-action: none; }
 
 .btn {
   display: inline-block; background: var(--ink); color: #fff;
@@ -86,13 +93,13 @@ a { color: inherit; text-decoration: none; }
 .grid--3 { grid-template-columns: repeat(3, 1fr); }
 .grid--4 { grid-template-columns: repeat(4, 1fr); }
 
-.card { transition: transform .3s ease; }
-.card:hover { transform: translateY(-6px); }
+.card { will-change: transform; }
 .card__media {
   aspect-ratio: 4/5; background: var(--bg-soft); overflow: hidden; margin-bottom: 18px;
+  position: relative;
 }
-.card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
-.card:hover .card__media img { transform: scale(1.05); }
+.card__canvas { position: absolute; inset: 0; }
+.card__canvas canvas { width: 100% !important; height: 100% !important; touch-action: none; }
 .card__cat { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); }
 .card__name { font-family: var(--serif); font-size: 22px; font-weight: 500; margin: 6px 0; }
 .card__desc { font-size: 14px; color: var(--muted); margin-bottom: 10px; }
@@ -101,12 +108,15 @@ a { color: inherit; text-decoration: none; }
 /* ---------- Filters ---------- */
 .filters { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-bottom: 48px; }
 .filter {
-  background: none; border: 1px solid var(--line); border-radius: 999px;
+  position: relative; isolation: isolate; background: none; border: 1px solid var(--line); border-radius: 999px;
   padding: 9px 22px; font-size: 13px; letter-spacing: .5px; cursor: pointer;
-  color: var(--muted); transition: all .2s;
+  color: var(--muted); transition: color .2s, border-color .2s;
 }
 .filter:hover { border-color: var(--ink); color: var(--ink); }
-.filter.is-active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.filter.is-active { color: #fff; border-color: var(--ink); }
+.filter__pill {
+  position: absolute; inset: 0; background: var(--ink); border-radius: 999px; z-index: -1;
+}
 
 .notice { text-align: center; color: var(--muted); padding: 30px 0; }
 
@@ -120,7 +130,9 @@ a { color: inherit; text-decoration: none; }
   aspect-ratio: 4/5;
   background: linear-gradient(135deg, #e9e4db, #d7cfc2);
   border-radius: 2px;
+  overflow: hidden;
 }
+.about__image canvas { touch-action: none; }
 
 /* ---------- Contact ---------- */
 .contact { background: var(--bg-soft); max-width: none; }
@@ -158,6 +170,8 @@ a { color: inherit; text-decoration: none; }
   .grid--3, .grid--4 { grid-template-columns: repeat(2, 1fr); }
   .about__grid, .contact__grid { grid-template-columns: 1fr; gap: 40px; }
   .about__image { max-width: 420px; }
+  .hero__content { grid-template-columns: 1fr; }
+  .hero__stage { height: 320px; order: -1; }
   .nav__toggle { display: flex; }
   .nav__links {
     position: absolute; top: 100%; right: 0; left: 0;
